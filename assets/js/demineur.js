@@ -6,6 +6,11 @@ const table = $("#table");
 let timerID, start, end, diff, stoped, row, cell, col;
 let opt = 9;
 
+table.css('display', 'flex');
+table.css('flexDirection', 'column');
+table.css('alignItems','center');
+table.css('marginTop', '70px');
+
 function init() {
     timerID = 0;
     start = 0;
@@ -75,8 +80,9 @@ function generateTable(heigh) {
             table.append(row);
             for (let j = 0; j < heigh; j++) {
                 cell = $('<td>');
-                cell.text(k + 1);
-                table.append(cell);
+                row.append(cell);
+                var imgBase = $('<img src="assets/images/normal.png" alt="normal">');
+                cell.append(imgBase);
                 cell.attr('id', k);
                 k++;
                 /* cell.onclick = function() {
