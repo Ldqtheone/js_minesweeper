@@ -5,6 +5,9 @@ const table = $("#table");
 
 let timerID, start, end, diff, stoped, row, cell, col;
 let opt = 9;
+let k = 0;
+let nbrMine = 10;
+let previousNumber = 0;
 
 table.css('display', 'flex');
 table.css('flexDirection', 'column');
@@ -20,6 +23,8 @@ function init() {
 
     chrono();
     generateTable(opt);
+    mine(10, 0, k);
+    console.log(mine(10, 0, k));
 }
 
 function selectDifficultie() {
@@ -63,7 +68,6 @@ function refresh() {
     if (sec < 10) {
         sec = "0" + sec;
     }
-    console.log("test");
     timer.text(min + ":" + sec);
     timerID = setTimeout(refresh, 50);
 }
@@ -71,8 +75,6 @@ function refresh() {
 //generate grid with selected difficultie value
 function generateTable(heigh) {
     table.text(" ");
-
-    let k = 0;
 
     while (k < heigh * heigh) {
         for (let i = 0; i < heigh; i++) {
@@ -104,4 +106,21 @@ function endGame() {
 function reset() {
     table.text("");
     startGame();
+}
+
+function mine(nbrMine, min, max) {
+    var mineTab = [];
+
+    for(var i=0; i < nbrMine; i++){
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        var mineAléa = Math.floor(Math.random() * (max - min+1)) + min;
+        while(mineTab.indexOf(mineAléa) !== -1 && mineTab.length < nbrMine){
+            mineAléa = Math.floor(Math.random() * (max - min+1)) + min;
+        }
+        mineTab.push(mineAléa);
+    }
+
+    return mineTab;
+
 }
