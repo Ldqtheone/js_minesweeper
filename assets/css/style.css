@@ -1,1 +1,16 @@
-test
+body{
+    text-align: center;
+}
+
+#chrono{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: solid 2px lightgrey;
+}
+
+button{
+    margin: 0 50px 0 50px;
+}

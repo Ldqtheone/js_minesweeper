@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Démineurs</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
+    <h1>Démineur</h1>
+    <div id="chrono">
+        <select>
+            <option>Débutant (9x9, 10 bombes)</option>
+            <option>Intermédiaire (16x16, 40 bombes)</option>
+            <option>Expert (22x22, 100 bombes)</option>
+            <option>Maître (30x30, 250 bombes)</option>
+        </select>
+        <button id="start">Nouvelle partie</button>
+        <span>Temps : </span><p id="hours">  00:00</p>
+    </div>
+    <table id="table"></table>
 </body>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="assets/js/demineur.js"></script>
 </html>
