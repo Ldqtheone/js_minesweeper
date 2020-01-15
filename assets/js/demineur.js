@@ -3,11 +3,9 @@ const timer = $("#hours");
 const table = $("#table");
 
 
-let timerID, start, end, diff, stoped, row, cell, col;
+let timerID, start, end, diff, stoped, row, cell, col, nbrMine;
 let opt = 9;
 let k = 0;
-let nbrMine = 10;
-let previousNumber = 0;
 
 var mineTab = [];
 
@@ -24,23 +22,18 @@ function init() {
     stoped = false;
 
     chrono();
-
     generateTable(opt);
-     mine(10, 0, opt*opt);
-
-
+    mine(nbrMine, 0, (opt*opt) - 1);
 }
 
 function selectDifficultie() {
     opt = $('#difficultie').val();
-
     return opt;
 }
 
 function startGame() {
     init();
 }
-
 
 function chrono() {
     startB.attr('disabled', true);
@@ -79,6 +72,22 @@ function refresh() {
 //generate grid with selected difficultie value
 function generateTable(heigh) {
     table.text(" ");
+
+    switch (heigh) {
+        case "9": nbrMine = 10;
+        break;
+        case "16": nbrMine = 40;
+        break;
+        case "22": nbrMine = 100;
+        break;
+        case "30": nbrMine = 250;
+        break;
+        default:
+            nbrMine = 10;
+            break;
+    }
+
+    console.log(nbrMine);
 
     while (k < heigh * heigh) {
         for (let i = 0; i < heigh; i++) {
@@ -144,6 +153,5 @@ function onClickMine(id){
         bombtest.append(imgBomb);
         console.log(mineTab.values());
     }
-
-    }
+   }
 }
