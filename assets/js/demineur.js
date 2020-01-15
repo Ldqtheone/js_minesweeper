@@ -87,8 +87,6 @@ function generateTable(heigh) {
             break;
     }
 
-    console.log(nbrMine);
-
     while (k < heigh * heigh) {
         for (let i = 0; i < heigh; i++) {
             row = $('<tr>');
@@ -101,12 +99,7 @@ function generateTable(heigh) {
                 cell.attr('id', k);
                 cell.attr("onclick","onClickMine('" + k + "')");
                 k++;
-                /* cell.onclick = function() {
-                    clickCell(this);
-                };
-                const mine = document.createAttribute("data-mine");
-                mine.value = "false";
-                cell.setAttributeNode(mine); */
+                const mine = cell.attr('data-mine','false');
             }
         }
     }
