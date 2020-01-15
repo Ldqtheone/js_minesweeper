@@ -8,11 +8,11 @@
 <body>
     <h1>Démineur</h1>
     <div id="chrono">
-        <select>
-            <option>Débutant (9x9, 10 bombes)</option>
-            <option>Intermédiaire (16x16, 40 bombes)</option>
-            <option>Expert (22x22, 100 bombes)</option>
-            <option>Maître (30x30, 250 bombes)</option>
+        <select id="difficultie" onchange="selectDifficultie()">
+            <option value="9" id="starter">Débutant (9x9, 10 bombes)</option>
+            <option value="16" id="medium">Intermédiaire (16x16, 40 bombes)</option>
+            <option value="22" id="expert">Expert (22x22, 100 bombes)</option>
+            <option value="30" id="master">Maître (30x30, 250 bombes)</option>
         </select>
         <button id="start" onclick="startGame()">Nouvelle partie</button>
         <span>Temps : </span><p id="hours">  00:00</p>

@@ -3,7 +3,30 @@ const timer = $("#hours");
 const table = $("#table");
 
 
-let timerID, start, end, diff, stoped;
+let timerID, start, end, diff, stoped, row, cell, col;
+let opt = 9;
+
+function init() {
+    timerID = 0;
+    start = 0;
+    end = 0;
+    diff = 0;
+    stoped = false;
+
+    chrono();
+    generateTable(opt);
+}
+
+function selectDifficultie() {
+    opt = $('#difficultie').val();
+
+    return opt;
+}
+
+function startGame() {
+    init();
+}
+
 
 function chrono() {
     startB.attr('disabled', true);
@@ -40,23 +63,31 @@ function refresh() {
     timerID = setTimeout(refresh, 50);
 }
 
-function init() {
-    timerID = 0;
-    start = 0;
-    end = 0;
-    diff = 0;
-    stoped = false;
+//generate grid with selected difficultie value
+function generateTable(heigh) {
+    table.text(" ");
 
-    chrono();
-}
+    let k = 0;
 
-function startGame() {
-    generateTable();
-    init();
-}
-
-function generateTable() {
-
+    while (k < heigh * heigh) {
+        for (let i = 0; i < heigh; i++) {
+            row = $('<tr>');
+            table.append(row);
+            for (let j = 0; j < heigh; j++) {
+                cell = $('<td>');
+                cell.text(k + 1);
+                table.append(cell);
+                cell.attr('id', k);
+                k++;
+                /* cell.onclick = function() {
+                    clickCell(this);
+                };
+                const mine = document.createAttribute("data-mine");
+                mine.value = "false";
+                cell.setAttributeNode(mine); */
+            }
+        }
+    }
 }
 
 function endGame() {
