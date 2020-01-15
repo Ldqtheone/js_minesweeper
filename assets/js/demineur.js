@@ -1,12 +1,9 @@
-var startB = $("#start");
-var timer = $("#hours");
-var table = $("#table");
+const startB = $("#start");
+const timer = $("#hours");
+const table = $("#table");
 
-var timerID = 0;
-var start = 0;
-var end = 0;
-var diff = 0;
-var stoped = false;
+
+let timerID, start, end, diff, stoped;
 
 function chrono() {
     startB.attr('disabled', true);
@@ -39,12 +36,18 @@ function refresh() {
 }
 
 function init() {
+    timerID = 0;
+    start = 0;
+    end = 0;
+    diff = 0;
+    stoped = false;
 
+    chrono();
 }
 
 function startGame() {
     generateTable();
-    chrono();
+    init();
 }
 
 function generateTable() {
