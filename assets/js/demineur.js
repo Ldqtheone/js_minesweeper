@@ -16,6 +16,11 @@ function chrono() {
     refresh();
 }
 
+function chronoStopped() {
+    clearTimeout(timerID);
+    stoped = true;
+}
+
 function refresh() {
     end = new Date();
     diff = end - start;
@@ -54,6 +59,12 @@ function generateTable() {
 
 }
 
-function reset() {
+function endGame() {
+    chronoStopped();
+    reset();
+}
 
+function reset() {
+    table.text("");
+    startGame();
 }
