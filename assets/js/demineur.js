@@ -182,15 +182,15 @@ function cellClick() {
             var col = this.id[2];
             console.log(row);
             console.log(col);
-            var h = 0;
-            var adj = [(this.id[0]+1)+ "." +(this.id[2]+1) , (this.id[0]+1)+ "." +this.id[2] , (this.id[0]+1)+ "." +(this.id[2]-1) , this.id[0]+ "." +(this.id[2]+1) , this.id[0]+ "." +this.id[2] , this.id[0]+ "." +(this.id[2]-1) , (this.id[0]-1)+ "." +(this.id[2]+1) , (this.id[0]-1)+ "." +this.id[2] , (this.id[0]-1)+ "." +(this.id[2]-1)];
+            var adj = [(row+1)+ "." +(col+1) , (row+1)+ "." +col , (row+1)+ "." +(col-1) , row+ "." +(col+1) , row+ "." +col , row+ "." +(col-1) , (row-1)+ "." +(col+1) , (row-1)+ "." +col , (row-1)+ "." +(col-1)];
             for (var e = 0; e < mineTab.length; e++) {
-                console.log(adj[h])
-                if(adj[h] != mineTab[e]){
-                    $(this).empty();
-                    $(this).append('<img src="assets/images/empty.png" alt="empty">');
+                for(var h = 0; h < 8; h++) {
+                    console.log(adj[h]);
+                    if(adj[h] != mineTab[e]){
+                        $(this).empty();
+                        $(this).append('<img src="assets/images/0.png" alt="empty">');
+                    }
                 }
-                h++;
             }
         }
     }
