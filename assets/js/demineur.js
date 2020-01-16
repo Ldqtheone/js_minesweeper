@@ -99,10 +99,21 @@ function generateTable(heigh) {
             for (let j = 0; j < heigh; j++) {
                 cell = $('<td>');
                 row.append(cell);
+
                 imgBase = $('<img src="assets/images/normal.png" alt="normal">');
                 cell.append(imgBase);
+
+                cell.attr('data-mine', false);
+
                 var id = i + "." + j;
                 cell.attr('id', id);
+
+                for (var e = 0; e < mineTab.length; e++) {
+                    if (mineTab[e] === id) {
+                        cell.attr('data-mine', true);
+                    }
+                }
+
                 cell.click(cellClick);
                 k++;
             }
@@ -111,8 +122,16 @@ function generateTable(heigh) {
 }
 
 function endGame() {
+    for (var i = 0; i < opt; i++) {
+        for (var j = 0; j < opt; j++) {
+            if (cell.attr('data-mine', true)) {
+                console.log(this.cell.id);
+                $(this).empty();
+                $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
+            }
+        }
+    }
     chronoStopped();
-    reset();
 }
 
 function reset() {
@@ -143,13 +162,14 @@ function cellClick() {
     for (var e = 0; e < mineTab.length; e++) {
         if (mineTab[e] == this.id) {
             isBomb = true;
-            console.log("ok");
-            console.log(this.id[0])
+            /* console.log("ok");
+            console.log(this.id[0]);
             $(this).empty();
-            $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
+            $(this).append('<img src="assets/images/bomb.png" alt="bomb">'); */
+            endGame();
         }
 
-        /* else {
+        if(isBomb == false){
             var mineCount = 0;
             var cellRow = this.id[0];
             var cellCol = this.id[2];
@@ -174,9 +194,9 @@ function cellClick() {
             }
             //checkLevelCompletion();
 
-        } */
+        }
 
-        if(isBomb == false) {
+        /* if(isBomb == false) {
             var mineCount = 0;
             var row = this.id[0];
             var col = this.id[2];
@@ -192,6 +212,6 @@ function cellClick() {
                 }
                 h++;
             }
-        }
+        }*/
     }
 }
