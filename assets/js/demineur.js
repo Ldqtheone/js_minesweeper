@@ -60,7 +60,7 @@ function refresh() {
 }
 
 function generateTable(opt) {
-    //generate 10 by 10 grid
+
     table.innerHTML="";
 
     switch (opt) {
@@ -95,7 +95,7 @@ function generateTable(opt) {
 }
 
 function addMines() {
-    //Add mines randomly
+
     for (var i=0; i<=nbrMine; i++) {
         var row = Math.floor(Math.random() * opt);
         var col = Math.floor(Math.random() * opt);
@@ -105,7 +105,7 @@ function addMines() {
 }
 
 function revealMines() {
-    //Highlight all mines in red
+
     for (var i=0; i<opt; i++) {
         for(var j=0; j<opt; j++) {
             var cell = table.rows[i].cells[j];
@@ -126,31 +126,37 @@ function checkLevelCompletion() {
         revealMines();
     }
 }
+function rightclic(id) {
+    cell.className="flag"
+}
 
-function clickCell(cell) {
-    //Check if the end-user clicked on a mine
+
+    function clickCell(cell) {
+
+
     if (cell.getAttribute("data-mine")=="true") {
         revealMines();
         alert("Game Over");
     } else {
         cell.className="clicked";
-        //Count and display the number of adjacent mines
+
         var mineCount=0;
         var cellRow = cell.parentNode.rowIndex;
         var cellCol = cell.cellIndex;
-        //alert(cellRow + " " + cellCol);
+
         for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
             for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
-                if (table.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
+                if (table.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++
             }
         }
         cell.className="number" + mineCount;
+        window.oncontextmenu = rightclic;
         cell.innerHTML=mineCount;
         if (mineCount==0) {
-            //Reveal all adjacent cells as they do not have a mine
-            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt); i++) {
-                for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,opt); j++) {
-                    //Recursive Call
+
+            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
+                for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
+
                     if (table.rows[i].cells[j].innerHTML=="") clickCell(table.rows[i].cells[j]);
                 }
             }
