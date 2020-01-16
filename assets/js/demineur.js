@@ -1,18 +1,9 @@
-const startB = $("#start");
-const timer = $("#hours");
-const table = $("#table");
+var table = document.getElementById("table");
+var timer = document.getElementById("hours");
+var startB = document.getElementById("start");
 
-
-let timerID, start, end, diff, stoped, row, cell, col, nbrMine, imgBase;
+let timerID, start, end, diff, stoped, nbrMine;
 let opt = 9;
-let k = 0;
-
-var mineTab = [];
-
-table.css('display', 'flex');
-table.css('flexDirection', 'column');
-table.css('alignItems', 'center');
-table.css('marginTop', '70px');
 
 function init() {
     timerID = 0;
@@ -26,7 +17,7 @@ function init() {
 }
 
 function selectDifficultie() {
-    opt = $('#difficultie').val();
+    opt = document.getElementById("difficultie").value;
     return opt;
 }
 
@@ -35,7 +26,7 @@ function startGame() {
 }
 
 function chrono() {
-    startB.attr('disabled', true);
+    startB.disabled = true;
     if (!stoped)
         start = new Date();
     else {
@@ -64,15 +55,15 @@ function refresh() {
     if (sec < 10) {
         sec = "0" + sec;
     }
-    timer.text(min + ":" + sec);
+    timer.textContent = min + ":" + sec;
     timerID = setTimeout(refresh, 50);
 }
 
-//generate grid with selected difficultie value
-function generateTable(heigh) {
-    table.text(" ");
+function generateTable(opt) {
+    //generate 10 by 10 grid
+    table.innerHTML="";
 
-    switch (heigh) {
+    switch (opt) {
         case "9":
             nbrMine = 10;
             break;
@@ -90,108 +81,80 @@ function generateTable(heigh) {
             break;
     }
 
-    mine(nbrMine, 0, opt);
+    for (var i=0; i<opt; i++) {
+        row = table.insertRow(i);
+        for (var j=0; j<opt; j++) {
+            cell = row.insertCell(j);
+            cell.onclick = function() { clickCell(this); };
+            var mine = document.createAttribute("data-mine");
+            mine.value = "false";
+            cell.setAttributeNode(mine);
+        }
+    }
+    addMines();
+}
 
-    while (k < heigh * heigh) {
-        for (let i = 0; i < heigh; i++) {
-            row = $('<tr>');
-            table.append(row);
-            for (let j = 0; j < heigh; j++) {
-                cell = $('<td>');
-                row.append(cell);
-                imgBase = $('<img src="assets/images/normal.png" alt="normal">');
-                cell.append(imgBase);
-                var id = i + "." + j;
-                cell.attr('id', id);
-                cell.click(cellClick);
-                k++;
-            }
+function addMines() {
+    //Add mines randomly
+    for (var i=0; i<=nbrMine; i++) {
+        var row = Math.floor(Math.random() * opt);
+        var col = Math.floor(Math.random() * opt);
+        var cell = table.rows[row].cells[col];
+        cell.setAttribute("data-mine","true");
+    }
+}
+
+function revealMines() {
+    //Highlight all mines in red
+    for (var i=0; i<opt; i++) {
+        for(var j=0; j<opt; j++) {
+            var cell = table.rows[i].cells[j];
+            if (cell.getAttribute("data-mine")=="true") cell.className="mine";
         }
     }
 }
 
-function endGame() {
-    chronoStopped();
-    reset();
-}
-
-function reset() {
-    table.text("");
-    startGame();
-}
-
-function mine(nbrMine, min, max) {
-    mineTab = [];
-
-    for (var i = 0; i < nbrMine; i++) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        var minRow = Math.floor(Math.random() * (max - min)) + min;
-        var minCol = Math.floor(Math.random() * (max - min)) + min;
-        while (mineTab.indexOf(minRow + "." + minCol) !== -1 && mineTab.length < nbrMine) {
-            minRow = Math.floor(Math.random() * (max - min)) + min;
-            minCol = Math.floor(Math.random() * (max - min)) + min;
+function checkLevelCompletion() {
+    var levelComplete = true;
+    for (var i=0; i<opt; i++) {
+        for(var j=0; j<opt; j++) {
+            if ((table.rows[i].cells[j].getAttribute("data-mine")=="false") && (table.rows[i].cells[j].innerHTML=="")) levelComplete=false;
         }
-        mineTab.push(minRow + "." + minCol);
     }
-    console.log(mineTab);
-    return mineTab;
+    if (levelComplete) {
+        alert("You Win!");
+        revealMines();
+    }
 }
 
-function cellClick() {
-    let isBomb = false;
-    for (var e = 0; e < mineTab.length; e++) {
-        if (mineTab[e] == this.id) {
-            isBomb = true;
-            console.log("ok");
-            console.log(this.id[0])
-            $(this).empty();
-            $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
-        }
-
-        /* else {
-            var mineCount = 0;
-            var cellRow = this.id[0];
-            var cellCol = this.id[2];
-            for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, 9); i++) {
-                for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, 9); j++) {
-                    if (mineTab[e] == this.id)
-                        mineCount++;
-                        $(this).empty();
-                        $(this).append('<img src="assets/images/'+ mineCount +'.png" alt="number">');
-                }
-            }
-
-            if (mineCount === 0) {
-                //Reveal all adjacent cells as they do not have a mine
-                for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, 9); i++) {
-                    for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, 9); j++) {
-                        //Recursive Call
-                        if (this === '<img src="assets/images/0.png" alt="number">')
-                            cellClick(this[cellRow][cellCol]);
-                    }
-                }
-            }
-            //checkLevelCompletion();
-
-        } */
-
-        if(isBomb == false) {
-            var mineCount = 0;
-            var row = this.id[0];
-            var col = this.id[2];
-            console.log(row);
-            console.log(col);
-            var h = 0;
-            var adj = [(this.id[0]+1)+ "." +(this.id[2]+1) , (this.id[0]+1)+ "." +this.id[2] , (this.id[0]+1)+ "." +(this.id[2]-1) , this.id[0]+ "." +(this.id[2]+1) , this.id[0]+ "." +this.id[2] , this.id[0]+ "." +(this.id[2]-1) , (this.id[0]-1)+ "." +(this.id[2]+1) , (this.id[0]-1)+ "." +this.id[2] , (this.id[0]-1)+ "." +(this.id[2]-1)];
-            for (var e = 0; e < mineTab.length; e++) {
-                console.log(adj[h])
-                if(adj[h] != mineTab[e]){
-                    $(this).empty();
-                    $(this).append('<img src="assets/images/empty.png" alt="empty">');
-                }
-                h++;
+function clickCell(cell) {
+    //Check if the end-user clicked on a mine
+    if (cell.getAttribute("data-mine")=="true") {
+        revealMines();
+        alert("Game Over");
+    } else {
+        cell.className="clicked";
+        //Count and display the number of adjacent mines
+        var mineCount=0;
+        var cellRow = cell.parentNode.rowIndex;
+        var cellCol = cell.cellIndex;
+        //alert(cellRow + " " + cellCol);
+        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
+            for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
+                if (table.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
             }
         }
+        cell.className="number" + mineCount;
+        cell.innerHTML=mineCount;
+        if (mineCount==0) {
+            //Reveal all adjacent cells as they do not have a mine
+            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt); i++) {
+                for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,opt); j++) {
+                    //Recursive Call
+                    if (table.rows[i].cells[j].innerHTML=="") clickCell(table.rows[i].cells[j]);
+                }
+            }
+        }
+        checkLevelCompletion();
     }
 }

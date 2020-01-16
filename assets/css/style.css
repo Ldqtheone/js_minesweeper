@@ -24,7 +24,7 @@ table{
 
 #table TR TD{
     border:1px solid white;
-    background: #999999;
+    background: url("../images/normal.png");
     width: 16px;
     height: 16px;
     text-align: center;
@@ -35,5 +35,30 @@ table{
 }
 
 #table TR TD.mine {
-    background: #FF0000;
+    background: url("../images/bomb.png");
+}
+
+.number1{
+    background: url("../images/1.png");
+}
+.number2{
+    background: url("../images/2.png");
+}
+.number3{
+    background: url("../images/3.png");
+}
+.number4{
+    background: url("../images/4.png");
+}
+.number5{
+    background: url("../images/5.png");
+}
+.number6{
+    background: url("../images/6.png");
+}
+.number7{
+    background: url("../images/7.png");
+}
+.number8{
+    background: url("../images/8.png");
 }
