@@ -103,17 +103,7 @@ function generateTable(heigh) {
                 cell.append(imgBase);
                 var id = i + "." + j;
                 cell.attr('id', id);
-                cell.click(function () {
-                    let isBomb = false;
-                    for (var e = 0; e < mineTab.length; e++) {
-                        if (mineTab[e] == this.id) {
-                            isBomb = true;
-                            console.log("ok");
-                            $(this).empty();
-                            $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
-                        }
-                    }
-                });
+                cell.click(cellClick);
                 k++;
             }
         }
@@ -148,6 +138,60 @@ function mine(nbrMine, min, max) {
     return mineTab;
 }
 
-function onClickMine(cell) {
+function cellClick() {
+    let isBomb = false;
+    for (var e = 0; e < mineTab.length; e++) {
+        if (mineTab[e] == this.id) {
+            isBomb = true;
+            console.log("ok");
+            console.log(this.id[0])
+            $(this).empty();
+            $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
+        }
 
+        /* else {
+            var mineCount = 0;
+            var cellRow = this.id[0];
+            var cellCol = this.id[2];
+            for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, 9); i++) {
+                for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, 9); j++) {
+                    if (mineTab[e] == this.id)
+                        mineCount++;
+                        $(this).empty();
+                        $(this).append('<img src="assets/images/'+ mineCount +'.png" alt="number">');
+                }
+            }
+
+            if (mineCount === 0) {
+                //Reveal all adjacent cells as they do not have a mine
+                for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, 9); i++) {
+                    for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, 9); j++) {
+                        //Recursive Call
+                        if (this === '<img src="assets/images/0.png" alt="number">')
+                            cellClick(this[cellRow][cellCol]);
+                    }
+                }
+            }
+            //checkLevelCompletion();
+
+        } */
+
+        if(isBomb == false) {
+            var mineCount = 0;
+            var row = this.id[0];
+            var col = this.id[2];
+            console.log(row);
+            console.log(col);
+            var h = 0;
+            var adj = [(this.id[0]+1)+ "." +(this.id[2]+1) , (this.id[0]+1)+ "." +this.id[2] , (this.id[0]+1)+ "." +(this.id[2]-1) , this.id[0]+ "." +(this.id[2]+1) , this.id[0]+ "." +this.id[2] , this.id[0]+ "." +(this.id[2]-1) , (this.id[0]-1)+ "." +(this.id[2]+1) , (this.id[0]-1)+ "." +this.id[2] , (this.id[0]-1)+ "." +(this.id[2]-1)];
+            for (var e = 0; e < mineTab.length; e++) {
+                console.log(adj[h])
+                if(adj[h] != mineTab[e]){
+                    $(this).empty();
+                    $(this).append('<img src="assets/images/empty.png" alt="empty">');
+                }
+                h++;
+            }
+        }
+    }
 }
