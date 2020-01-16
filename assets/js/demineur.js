@@ -2,7 +2,7 @@ var table = document.getElementById("table");
 var timer = document.getElementById("hours");
 var startB = document.getElementById("start");
 
-let timerID, start, end, diff, stoped, nbrMine;
+let timerID, start, end, diff, stoped, nbrMine, isFlagged;
 let opt = 9;
 
 function init() {
@@ -85,10 +85,18 @@ function generateTable(opt) {
         row = table.insertRow(i);
         for (var j=0; j<opt; j++) {
             cell = row.insertCell(j);
-            cell.onclick = function() { clickCell(this); };
+
+            cell.onclick = function() {
+                clickCell(this);
+            };
+
             var mine = document.createAttribute("data-mine");
             mine.value = "false";
             cell.setAttributeNode(mine);
+            
+            cell.oncontextmenu = function () {
+                toggleFlag(this);
+            };
         }
     }
     addMines();
@@ -109,7 +117,10 @@ function revealMines() {
     for (var i=0; i<opt; i++) {
         for(var j=0; j<opt; j++) {
             var cell = table.rows[i].cells[j];
-            if (cell.getAttribute("data-mine")=="true") cell.className="mine";
+            if (cell.getAttribute("data-mine")=="true") {
+                cell.className = "mine";
+                cell.setAttribute("onclick", "");
+            }
         }
     }
 }
@@ -122,19 +133,20 @@ function checkLevelCompletion() {
         }
     }
     if (levelComplete) {
+        chronoStopped();
         alert("You Win!");
         revealMines();
     }
 }
-function rightclic(id) {
-    cell.className="flag"
+function toggleFlag(cell) {
+    cell.classList.toggle("flag");
+    cell.setAttribute("isFlagged", "true");
 }
 
 
-    function clickCell(cell) {
-
-
+function clickCell(cell) {
     if (cell.getAttribute("data-mine")=="true") {
+        chronoStopped();
         revealMines();
         alert("Game Over");
     } else {
@@ -146,18 +158,19 @@ function rightclic(id) {
 
         for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
             for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
-                if (table.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++
+                if (table.rows[i].cells[j].getAttribute("data-mine")=="true")
+                    mineCount++
             }
         }
         cell.className="number" + mineCount;
-        window.oncontextmenu = rightclic;
         cell.innerHTML=mineCount;
         if (mineCount==0) {
 
             for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
                 for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
 
-                    if (table.rows[i].cells[j].innerHTML=="") clickCell(table.rows[i].cells[j]);
+                    if (table.rows[i].cells[j].innerHTML=="")
+                        clickCell(table.rows[i].cells[j]);
                 }
             }
         }
