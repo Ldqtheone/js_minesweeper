@@ -122,14 +122,12 @@ function generateTable(heigh) {
 }
 
 function endGame() {
-    for (var i = 0; i < opt; i++) {
-        for (var j = 0; j < opt; j++) {
             if (cell.attr('data-mine', true)) {
-                console.log(this.cell.id);
-                $(this).empty();
-                $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
-            }
-        }
+                for (var k = 0 ; k < mineTab.length; k++){
+                    console.log(document.getElementById(mineTab[k]));
+                    // $('#'+mineTab[k]).empty();
+                    document.getElementById(mineTab[k]).textContent = '<img src="../images/bomb.png" alt="bomb">';
+                }
     }
     chronoStopped();
 }
