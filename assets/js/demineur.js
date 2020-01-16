@@ -3,7 +3,7 @@ const timer = $("#hours");
 const table = $("#table");
 
 
-let timerID, start, end, diff, stoped, row, cell, col, nbrMine;
+let timerID, start, end, diff, stoped, row, cell, col, nbrMine, imgBase;
 let opt = 9;
 let k = 0;
 
@@ -11,7 +11,7 @@ var mineTab = [];
 
 table.css('display', 'flex');
 table.css('flexDirection', 'column');
-table.css('alignItems','center');
+table.css('alignItems', 'center');
 table.css('marginTop', '70px');
 
 function init() {
@@ -23,7 +23,6 @@ function init() {
 
     chrono();
     generateTable(opt);
-    mine(nbrMine, 0, (opt*opt) - 1);
 }
 
 function selectDifficultie() {
@@ -74,18 +73,24 @@ function generateTable(heigh) {
     table.text(" ");
 
     switch (heigh) {
-        case "9": nbrMine = 10;
-        break;
-        case "16": nbrMine = 40;
-        break;
-        case "22": nbrMine = 100;
-        break;
-        case "30": nbrMine = 250;
-        break;
+        case "9":
+            nbrMine = 10;
+            break;
+        case "16":
+            nbrMine = 40;
+            break;
+        case "22":
+            nbrMine = 100;
+            break;
+        case "30":
+            nbrMine = 250;
+            break;
         default:
             nbrMine = 10;
             break;
     }
+
+    mine(nbrMine, 0, opt);
 
     while (k < heigh * heigh) {
         for (let i = 0; i < heigh; i++) {
@@ -94,12 +99,22 @@ function generateTable(heigh) {
             for (let j = 0; j < heigh; j++) {
                 cell = $('<td>');
                 row.append(cell);
-                var imgBase = $('<img src="assets/images/normal.png" alt="normal">');
+                imgBase = $('<img src="assets/images/normal.png" alt="normal">');
                 cell.append(imgBase);
-                cell.attr('id', k);
-                cell.attr("onclick","onClickMine('" + k + "')");
+                var id = i + "." + j;
+                cell.attr('id', id);
+                cell.click(function () {
+                    let isBomb = false;
+                    for (var e = 0; e < mineTab.length; e++) {
+                        if (mineTab[e] == this.id) {
+                            isBomb = true;
+                            console.log("ok");
+                            $(this).empty();
+                            $(this).append('<img src="assets/images/bomb.png" alt="bomb">');
+                        }
+                    }
+                });
                 k++;
-                const mine = cell.attr('data-mine','false');
             }
         }
     }
@@ -116,35 +131,23 @@ function reset() {
 }
 
 function mine(nbrMine, min, max) {
-     mineTab = [];
+    mineTab = [];
 
-    for(var i=0; i < nbrMine; i++){
+    for (var i = 0; i < nbrMine; i++) {
         min = Math.ceil(min);
         max = Math.floor(max);
-        var mineAlea = Math.floor(Math.random() * (max - min+1)) + min;
-        while(mineTab.indexOf(mineAlea) !== -1 && mineTab.length < nbrMine){
-            mineAlea = Math.floor(Math.random() * (max - min+1)) + min;
+        var minRow = Math.floor(Math.random() * (max - min)) + min;
+        var minCol = Math.floor(Math.random() * (max - min)) + min;
+        while (mineTab.indexOf(minRow + "." + minCol) !== -1 && mineTab.length < nbrMine) {
+            minRow = Math.floor(Math.random() * (max - min)) + min;
+            minCol = Math.floor(Math.random() * (max - min)) + min;
         }
-        mineTab.push(mineAlea);
-
+        mineTab.push(minRow + "." + minCol);
     }
     console.log(mineTab);
     return mineTab;
-
-
 }
 
-function onClickMine(id){
-   var isBomb = false;
-   for(var i = 0; i < mineTab.length; i++){
-    if(mineTab[i] == id){
-        isBomb=true;
-        console.log("ok");
-        var bombtest = $('#'+id);
-        bombtest.empty();
-        var imgBomb = $('<img src="assets/images/bomb.png" alt="bomb">');
-        bombtest.append(imgBomb);
-        console.log(mineTab.values());
-    }
-   }
+function onClickMine(cell) {
+
 }
