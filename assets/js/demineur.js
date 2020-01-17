@@ -3,7 +3,7 @@ const timer = $("#hours");
 const table = $("#table");
 
 
-let timerID, start, end, diff, stoped, row, cell, col, nbrMine, newLance;
+let timerID, start, end, diff, stoped, row, cell, col, nbrMine;
 let opt = 9;
 let k = 0;
 
@@ -131,7 +131,7 @@ function generateTable(heigh) {
     }
 }
 
-function endGame() {
+function endGame(cell) {
     if (cell.attr('data-mine', true)) {
         for (var k = 0; k < mineTab.length; k++) {
             document.getElementById(mineTab[k]).className = "mine";
@@ -172,17 +172,17 @@ function cellClick() {
 
     console.log(isBomb);
 
-    if (cell.hasClass('flag')) {
+    if ($(this).hasClass('flag')) {
          isFlag = true;
         console.log(cell)
 
     }
 
-    if (cell.attr('data-mine', true)) {
+    if ($(this).attr('data-mine') == "true") {
         for (var e = 0; e < mineTab.length; e++) {
             if (mineTab[e] == this.id) {
                 isBomb = true;
-                endGame();
+                endGame($(this));
             }
         }
     }
@@ -220,19 +220,20 @@ function cellClick() {
                 }
             }}
         }
-        // checkLevelCompletion();
+        checkLevelCompletion();
     }
 }
 
 function checkLevelCompletion() {
-    var levelComplete = false;
+    var levelComplete = true;
     for (var i=0; i<opt; i++) {
         for(var j=0; j<opt; j++) {
-            if ((document.getElementById(i+"."+j).getAttribute("data-mine") !== "false") && (document.getElementById(i+"."+j).getAttribute("clicked") == "true"))
+            if ((document.getElementById(i+"."+j).getAttribute("data-mine") !== "false") && (document.getElementById(i+"."+j).getAttribute("clicked") != "true"))
             {
-                levelComplete=true;
-                console.log(i+  " "+j+" "+document.getElementById(i+"."+j).getAttribute("data-mine") + " " + (document.getElementById(i+"."+j).className));
+                levelComplete=false;
 
+                console.log(i+  " "+j+" "+document.getElementById(i+"."+j).getAttribute("data-mine") + " " + (document.getElementById(i+"."+j).className));
+                break;
             }
         }
     }
