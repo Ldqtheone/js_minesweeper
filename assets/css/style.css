@@ -24,10 +24,13 @@ table{
 
 #table TR TD{
     border:1px solid white;
-    background: url("../images/normal.png");
     width: 16px;
     height: 16px;
     text-align: center;
+}
+
+.normal{
+    background: url("../images/normal.png");
 }
 
 #table TR TD.clicked {

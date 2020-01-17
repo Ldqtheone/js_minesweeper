@@ -3,7 +3,7 @@ const timer = $("#hours");
 const table = $("#table");
 
 
-let timerID, start, end, diff, stoped, row, cell, col, nbrMine;
+let timerID, start, end, diff, stoped, row, cell, col, nbrMine, newLance;
 let opt = 9;
 let k = 0;
 
@@ -104,27 +104,31 @@ function generateTable(heigh) {
 
                 var id = i + "." + j;
                 cell.attr('id', id);
+                cell.attr('class', "normal");
+
 
                 for (let e = 0; e < mineTab.length; e++) {
+                    console.log(mineTab)
+
                     if (mineTab[e] === id) {
                         cell.attr('data-mine', true);
                     }
                 }
 
+
+
                 cell.click(cellClick);
 
-                cell.on('contextmenu', toggleFlag(this));
+                cell.on('contextmenu', function () {
+                    this.classList.toggle("flag");
+                    this.toggleAttribute("isFlagged");
+                    return false;
+                });
 
                 k++;
             }
         }
     }
-}
-
-function toggleFlag(cell) {
-    //console.log(cell)
-    /* cell.id.toggleClass("flag");
-    this.attr("isFlagged", true); */
 }
 
 function endGame() {
@@ -161,8 +165,18 @@ function mine(nbrMine, min, max) {
 }
 
 function cellClick() {
+
     let isBomb = false;
+    let isFlag = false;
+    document.getElementById(this.id).setAttribute("clicked","true");
+
     console.log(isBomb);
+
+    if (cell.hasClass('flag')) {
+         isFlag = true;
+        console.log(cell)
+
+    }
 
     if (cell.attr('data-mine', true)) {
         for (var e = 0; e < mineTab.length; e++) {
@@ -173,61 +187,59 @@ function cellClick() {
         }
     }
 
-    if(isBomb === false){
+     if(isBomb == false && isFlag == false){
 
         document.getElementById(this.id).className = "number0";
-        
-        // console.log("test");
+
         var mineCount = 0;
         var cellRow = parseInt(this.id[0]);
         var cellCol = parseInt(this.id[2]);
-        var h = 0;
-        var adj = [(cellRow+1)+ "." +(cellCol+1) , (cellRow+1)+ "." +cellCol , (cellRow+1)+ "." +(cellCol-1) , cellRow+ "." +(cellCol+1) , cellRow+ "." + cellCol , cellRow+ "." +(cellCol-1) , (cellRow-1)+ "." +(cellCol+1) , (cellRow-1)+ "." +cellCol , (cellRow-1)+ "." +(cellCol-1)];
-        for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, opt); i++) {
-            for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, opt); j++) {
-                //for (h; h < adj.length; h++) {
-                    // console.log(adj[h]);
-                    if (document.getElementById(i + "." + j).getAttribute('data-mine') === "true") {
-                        mineCount++;
-                    }
-               //}
-            }
-        }
-
-        document.getElementById(this.id.innerHTML = "number" + mineCount);
-        document.getElementById(this.id.className = "number" + mineCount);
-
-        console.log(mineCount);
-
-        if (mineCount === 0) {
-            //Reveal all adjacent cells as they do not have a mine
-            for (var i = Math.max(cellRow - 1, 0); i < Math.min(cellRow + 1, opt); i++) {
-                for (var j = Math.max(cellCol - 1, 0); j < Math.min(cellCol + 1, opt); j++) {
-                    //Recursive Call
-                    if (document.getElementById(i + "." + j).innerHTML=="")
-                        cellClick(document.getElementById(i + "." + j));
+        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+            for (var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, opt - 1); j++) {
+                if (document.getElementById(i+"."+j).getAttribute('data-mine') === "true") {
+                    mineCount++;
                 }
             }
         }
-        //checkLevelCompletion();
 
+        console.log(mineCount);
+        console.log(this.id);
+        document.getElementById(this.id).className = "number" + mineCount;
+
+
+        if (mineCount === 0) {
+            console.log("rsgerdgrd");
+            //Reveal all adjacent cells as they do not have a mine
+            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+                for (var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, opt - 1); j++) {
+                //Recursive Call
+                if (document.getElementById(i+"."+j).className !== "number" + mineCount) {
+                    console.log("relance ?");
+                    newCell = document.getElementById(i+"."+j);
+                    newCell.click();
+                }
+            }}
+        }
+        // checkLevelCompletion();
+    }
+}
+
+function checkLevelCompletion() {
+    var levelComplete = false;
+    for (var i=0; i<opt; i++) {
+        for(var j=0; j<opt; j++) {
+            if ((document.getElementById(i+"."+j).getAttribute("data-mine") !== "false") && (document.getElementById(i+"."+j).getAttribute("clicked") == "true"))
+            {
+                levelComplete=true;
+                console.log(i+  " "+j+" "+document.getElementById(i+"."+j).getAttribute("data-mine") + " " + (document.getElementById(i+"."+j).className));
+
+            }
+        }
     }
 
-    /* if(isBomb == false) {
-        var mineCount = 0;
-        var row = this.id[0];
-        var col = this.id[2];
-        console.log(row);
-        console.log(col);
-        var h = 0;
-        var adj = [(this.id[0]+1)+ "." +(this.id[2]+1) , (this.id[0]+1)+ "." +this.id[2] , (this.id[0]+1)+ "." +(this.id[2]-1) , this.id[0]+ "." +(this.id[2]+1) , this.id[0]+ "." +this.id[2] , this.id[0]+ "." +(this.id[2]-1) , (this.id[0]-1)+ "." +(this.id[2]+1) , (this.id[0]-1)+ "." +this.id[2] , (this.id[0]-1)+ "." +(this.id[2]-1)];
-        for (var e = 0; e < mineTab.length; e++) {
-            console.log(adj[h])
-            if(adj[h] != mineTab[e]){
-                $(this).empty();
-                $(this).append('<img src="assets/images/empty.png" alt="empty">');
-            }
-            h++;
-        }
-    }*/
+    if (levelComplete == true) {
+        chronoStopped();
+        alert("You Win!");
+        endGame();
+    }
 }
