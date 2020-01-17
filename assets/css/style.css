@@ -69,3 +69,7 @@ table{
 #table TR TD.number8{
     background: url("../images/8.png");
 }
+
+td{
+    font-size: 0px;
+}

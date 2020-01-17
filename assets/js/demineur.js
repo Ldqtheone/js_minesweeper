@@ -156,18 +156,21 @@ function clickCell(cell) {
         var cellRow = cell.parentNode.rowIndex;
         var cellCol = cell.cellIndex;
 
-        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
-            for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
+        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+            for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,opt-1); j++) {
                 if (table.rows[i].cells[j].getAttribute("data-mine")=="true")
-                    mineCount++
+                    mineCount++;
             }
         }
-        cell.className="number" + mineCount;
+
         cell.innerHTML=mineCount;
+        cell.className="number" + mineCount;
+
+
         if (mineCount==0) {
 
-            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,8); i++) {
-                for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,8); j++) {
+            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+                for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,opt-1); j++) {
 
                     if (table.rows[i].cells[j].innerHTML=="")
                         clickCell(table.rows[i].cells[j]);
