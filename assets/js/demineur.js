@@ -108,13 +108,10 @@ function generateTable(heigh) {
 
 
                 for (let e = 0; e < mineTab.length; e++) {
-                    console.log(mineTab)
-
                     if (mineTab[e] === id) {
                         cell.attr('data-mine', true);
                     }
                 }
-
 
 
                 cell.click(cellClick);
@@ -168,14 +165,12 @@ function cellClick() {
 
     let isBomb = false;
     let isFlag = false;
-    document.getElementById(this.id).setAttribute("clicked","true");
+    document.getElementById(this.id).setAttribute("clicked", "true");
 
     console.log(isBomb);
 
     if ($(this).hasClass('flag')) {
-         isFlag = true;
-        console.log(cell)
-
+        isFlag = true;
     }
 
     if ($(this).attr('data-mine') == "true") {
@@ -187,38 +182,37 @@ function cellClick() {
         }
     }
 
-     if(isBomb == false && isFlag == false){
+    if (isBomb == false && isFlag == false) {
 
         document.getElementById(this.id).className = "number0";
 
         var mineCount = 0;
         var cellRow = parseInt(this.id[0]);
         var cellCol = parseInt(this.id[2]);
-        for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+        for (var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, opt - 1); i++) {
             for (var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, opt - 1); j++) {
-                if (document.getElementById(i+"."+j).getAttribute('data-mine') === "true") {
+                if (document.getElementById(i + "." + j).getAttribute('data-mine') === "true") {
                     mineCount++;
                 }
             }
         }
 
-        console.log(mineCount);
-        console.log(this.id);
         document.getElementById(this.id).className = "number" + mineCount;
 
 
         if (mineCount === 0) {
             console.log("rsgerdgrd");
             //Reveal all adjacent cells as they do not have a mine
-            for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,opt-1); i++) {
+            for (var i = Math.max(cellRow - 1, 0); i <= Math.min(cellRow + 1, opt - 1); i++) {
                 for (var j = Math.max(cellCol - 1, 0); j <= Math.min(cellCol + 1, opt - 1); j++) {
-                //Recursive Call
-                if (document.getElementById(i+"."+j).className !== "number" + mineCount) {
-                    console.log("relance ?");
-                    newCell = document.getElementById(i+"."+j);
-                    newCell.click();
+                    //Recursive Call
+                    if (document.getElementById(i + "." + j).className !== "number" + mineCount) {
+                        console.log("relance ?");
+                        newCell = document.getElementById(i + "." + j);
+                        newCell.click();
+                    }
                 }
-            }}
+            }
         }
         checkLevelCompletion();
     }
@@ -226,19 +220,16 @@ function cellClick() {
 
 function checkLevelCompletion() {
     var levelComplete = true;
-    for (var i=0; i<opt; i++) {
-        for(var j=0; j<opt; j++) {
-            if ((document.getElementById(i+"."+j).getAttribute("data-mine") !== "false") && (document.getElementById(i+"."+j).getAttribute("clicked") != "true"))
-            {
-                levelComplete=false;
-
-                console.log(i+  " "+j+" "+document.getElementById(i+"."+j).getAttribute("data-mine") + " " + (document.getElementById(i+"."+j).className));
-                break;
+    for (var i = 0; i < opt; i++) {
+        for (var j = 0; j < opt; j++) {
+            if ((document.getElementById(i + "." + j).getAttribute("data-mine") === "false")
+                && (document.getElementById(i + "." + j).className.includes("number"))) {
+                levelComplete = false;
             }
         }
     }
 
-    if (levelComplete == true) {
+    if (levelComplete) {
         chronoStopped();
         alert("You Win!");
         endGame();
